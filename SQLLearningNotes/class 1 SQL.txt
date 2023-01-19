@@ -1,0 +1,104 @@
+5SQL> conn SYSTEM/ppoint
+Connected.
+SQL> create user ajay identified by tiger default tablespace system quota 20m on system;
+
+User created.
+
+SQL> conn ajay/tiger
+ERROR:
+ORA-01045: user AJAY lacks CREATE SESSION privilege; logon denied 
+
+
+Warning: You are no longer connected to ORACLE.
+SQL> show user
+USER is ""
+SQL> conn SYSTEM/ppoint
+Connected.
+SQL> show user
+USER is "SYSTEM"
+SQL> grant create session to ajay;
+
+Grant succeeded.
+
+SQL> conn ajay/tiger
+Connected.
+SQL> show user
+USER is "AJAY"
+SQL> create table emp
+  2  (
+  3  empno number(5),
+  4  ename varchar2(10),
+  5  job varchar2(10),
+  6  sal number(8),
+  7  comm number(3),
+  8  mgr number(5),
+  9  hiredate date,
+ 10  deptno number(2)
+ 11  );
+create table emp
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> conn SYSTEM/ppoint
+Connected.
+SQL> grant create table to ajay;
+
+Grant succeeded.
+
+SQL> conn ajay/tiger
+Connected.
+SQL> create table emp
+     (
+     empno number(5),
+     ename varchar2(10),
+     job varchar2(10),
+     sal number(8),
+     comm number(3),
+     mgr number(5),
+     hiredate date,
+     deptno number(2)
+     );
+
+Table created.
+
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID                               
+------------------------------ ------- ----------                               
+EMP                            TABLE                                            
+
+SQL> describe emp;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(5)
+ ENAME                                              VARCHAR2(10)
+ JOB                                                VARCHAR2(10)
+ SAL                                                NUMBER(8)
+ COMM                                               NUMBER(3)
+ MGR                                                NUMBER(5)
+ HIREDATE                                           DATE
+ DEPTNO                                             NUMBER(2)
+
+SQL> desc emp;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMPNO                                              NUMBER(5)
+ ENAME                                              VARCHAR2(10)
+ JOB                                                VARCHAR2(10)
+ SAL                                                NUMBER(8)
+ COMM                                               NUMBER(3)
+ MGR                                                NUMBER(5)
+ HIREDATE                                           DATE
+ DEPTNO                                             NUMBER(2)
+
+SQL> insert into emp values(101,'VEER','MANAGER',35000,500,105,'01-JAN-91',10);
+
+1 row created.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> spool off;
